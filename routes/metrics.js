@@ -9,11 +9,9 @@ var fs = require("fs");
 //user-agent parser
 var parser = require('ua-parser-js');
 
-
 // Prometheus
 var prom_client = require('prom-client');
 var prom_registry = prom_client.register;
-
 
 var redis = require('redis');
 const redisClient = redis.createClient({
@@ -37,7 +35,6 @@ jcmcToProm.buildMetrics(prom_client);
 
 const { removeLabels } = require('prom-client/lib/util');
 const { Console } = require('console');
-const appConfig = require('../config/app-config');
 
 setInterval(async () => {
   let all_current_metrics = await prom_registry.getMetricsAsArray();
