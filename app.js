@@ -7,8 +7,9 @@ var logger = require('morgan');
 var cors = require('cors');
 
 
-var indexRouter = require('./routes/index');
-var metricsRouter = require('./routes/metrics');
+
+const helmet = require("helmet");
+
 
 var app = express();
 
@@ -18,17 +19,16 @@ var app = express();
 //   next();
 // });
 
+app.use(helmet()); //TODO add more security rules
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(
-    cors({origin: ['https://testmeet.meaplus.com']})
-  );  
-
+var indexRouter = require('./routes/index');
 app.use('/', indexRouter);
+var metricsRouter = require('./routes/metrics');  
 app.use('/metrics', metricsRouter);
 
 module.exports = app;
