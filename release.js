@@ -17,7 +17,7 @@ module.exports = {
       [
         '@semantic-release/github',
         {
-          assets: ['jcmc.tar.gz'],
+          assets: ['/tmp/jcmc.tar.gz'],
           message:
             'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
         },
