@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 22
       - run: mkdir .release
-      - run: tar --exclude='./.release' --exclude='./.git' --exclude='./.github' --exclude='./.vscode' -czvf ./.release/jcmc.tar.gz .
+      - run: tar --exclude='./.git' --exclude='./.github' --exclude='./.vscode' -czvf /tmp/jcmc.tar.gz .
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
