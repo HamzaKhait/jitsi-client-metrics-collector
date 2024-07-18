@@ -14,8 +14,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 22
-      - run: npm ci
+          node-version: 22.1.x
+      - run: npm cache clean --force
+      - run: npm ci --force
       - run: tar --exclude='./node_modules' --exclude='./.git' --exclude='./.github' --exclude='./.vscode' -czvf /tmp/jcmc.tar.gz .
       - run: npx semantic-release 
         env:
