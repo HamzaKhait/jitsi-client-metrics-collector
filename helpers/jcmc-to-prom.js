@@ -22,8 +22,9 @@ jcmcToProm.buildMetrics = function(prom_client) {
 jcmcToProm.transformJsonMetrics = function(jsonMetrics){
     let transformed_metrics = {};
     Object.keys(jsonMetrics.metrics).forEach(key => {
+        let keyWithPrefix = metricsConfig.prefix+key;
         if(jsonMetrics.metrics[key].value != null){ //exclude null values from the transformed metrics because null is not supported by Promtheus
-            transformed_metrics[key] = {
+            transformed_metrics[keyWithPrefix] = {
                 labels : {...jsonMetrics.default_labels, ...jsonMetrics.metrics[key].labels},
                 value : jsonMetrics.metrics[key].value
             }
