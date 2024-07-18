@@ -9,12 +9,12 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 22
+          node-version: 22.1.x
       - run: npm cache clean --force
       - run: npm i --force
       - run: tar --exclude='./node_modules' --exclude='./.git' --exclude='./.github' --exclude='./.vscode' -czvf /tmp/jcmc.tar.gz .
