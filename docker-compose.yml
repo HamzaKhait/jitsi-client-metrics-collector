@@ -10,8 +10,13 @@ services:
       - 9090:9090  
   nodeapp:
     image: node:lts-slim
-    # volumes:
-    #   - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    environment:
+      - NODE_ENV=development
+      - REDIS_URL=redis://redis:6379
+      - METRICS_EXPIRATION_CHECK=5 # In seconds
+      - METRICS_EXPIRATION=30 #In seconds
+      - ALLOW_PRIVATE_SCRAPE_ONLY=true
+      - PUSH_URL=http://127.0.0.1:3000/metrics/push # the push url that will be used by users
     networks:
       - localprom
     volumes:
