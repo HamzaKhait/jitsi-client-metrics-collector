@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 22.1.x
       - run: npm cache clean --force
-      - run: npm ci --force
+      - run: npm i --force
       - run: tar --exclude='./node_modules' --exclude='./.git' --exclude='./.github' --exclude='./.vscode' -czvf /tmp/jcmc.tar.gz .
       - run: npx semantic-release 
         env:
