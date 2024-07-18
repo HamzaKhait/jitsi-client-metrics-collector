@@ -2,6 +2,7 @@ const appConfig = require('./app-config');
 
 const metricsConfig = {}
 
+metricsConfig.prefix = appConfig.METRICS_PREFIX;
 
 metricsConfig.default_labels = [
     'client_id',

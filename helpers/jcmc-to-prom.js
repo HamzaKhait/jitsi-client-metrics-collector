@@ -9,12 +9,13 @@ jcmcToProm.buildMetrics = function(prom_client) {
     for (const metric of metricsConfig.metrics) {
         if(metric.type === 'gauge'){
             let newGauge = new prom_client.Gauge({
-                name: metric.name,
+                name: metricsConfig.prefix + metric.name,
                 help: metric.help,
                 labelNames: [...metricsConfig.default_labels, ...metric.labels]
               });
             console.log(`Creating new metric for prometheus : ${metric.name}`);
         }
+        //TODO later handel other types of metrics
       }      
 }
 
