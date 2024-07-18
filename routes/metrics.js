@@ -1,4 +1,5 @@
 const appConfig = require('../config/app-config');
+const jcmcUtils = require('../helpers/jcmc-utils');
 
 var express = require('express');
 var router = express.Router();
@@ -63,10 +64,14 @@ setInterval(async () => {
   }
 }, appConfig.METRICS_EXPIRATION_CHECK*1000); // Expiration check in ms
 
-
 router.get('/', async (req, res) => {
-  let metrics = await prom_registry.metrics();
-  res.status(200).send(metrics); 
+  if (appConfig.ALLOW_PRIVATE_SCRAPE_ONLY && !jcmcUtils.isPrivateIP(req.ip)){
+    res.status(403).json('Access denied.');
+  }
+  else{
+    let metrics = await prom_registry.metrics();
+    res.status(200).send(metrics); 
+  }
 })
 
 router.post('/push', async (req, res) => {

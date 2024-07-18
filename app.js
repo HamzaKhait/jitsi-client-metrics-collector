@@ -19,6 +19,8 @@ var app = express();
 //   next();
 // });
 
+app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']) // trust reverse proxies from the following subnets
+
 app.use(helmet()); //TODO add more security rules
 app.use(logger('dev'));
 app.use(express.json());
