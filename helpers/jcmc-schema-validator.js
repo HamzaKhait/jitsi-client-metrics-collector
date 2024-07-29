@@ -8,7 +8,7 @@ var validator = () => {
             client_id: Joi.string().guid({separator:'-'}).required(),
             participant_id : Joi.string().required(),
             roomname : Joi.string().required()
-        }),
+        }).required(),
         metrics : {
             connectionquality : Joi.object({
                 labels : Joi.object({
