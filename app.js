@@ -7,7 +7,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
-
+// TODO Ajouter le nom de l'utilisateur 
+// TODO Ajouter le codec
+// TODO AJOUTER la limitation dans le README 
 
 const helmet = require("helmet");
 
@@ -19,6 +21,16 @@ var app = express();
 //   req.redisClient = redisClient;
 //   next();
 // });
+
+const corsOptions = {
+  origin: '*', // Allow this specific origin
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Allow credentials such as cookies
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions)); //TODO REMOVE. ONLY FOR DEV
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

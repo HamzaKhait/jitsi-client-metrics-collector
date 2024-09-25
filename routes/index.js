@@ -5,7 +5,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send(200);
+  res.status(200).send("JCMC IS UP"); 
 });
 
 router.get('/client-file', function(req, res, next) {

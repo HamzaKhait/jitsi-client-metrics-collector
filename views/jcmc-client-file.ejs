@@ -82,15 +82,15 @@ function formatJitsiMetrics(JitsiMetrics) {
             packetloss_total : {
                 value : JitsiMetrics.packetLoss.total || null,
             },
-            transport_rtt : {
-                labels:{
-                    src_ip : JitsiMetrics.transport[0].localip.split(':')[0],
-                    dst_ip :JitsiMetrics.transport[0].ip.split(':')[0],
-                    protocol : JitsiMetrics.transport[0].type,
-                    networkType : JitsiMetrics.transport[0].networkType
+            transport_rtt: JitsiMetrics.transport.map(item => ({
+                labels: {
+                    src_ip: item.localip.replace(/:\d+$/, ''),
+                    dst_ip: item.ip.replace(/:\d+$/, ''),
+                    protocol: item.type, 
+                    networkType: item.networkType
                 },
-                value : JitsiMetrics.transport[0].rtt || null,
-            }    
+                value: item.rtt
+            }))
         }
     };
 }
@@ -118,7 +118,7 @@ function RunJCMC() {
     APP.conference._room.on(local_stats_updated_event, (jitsiStats) => pushMetrics(jitsiStats))
 }
 
-// wait for Jitsi
+// wait for Jitsi to be ready
 function waitForJitsiAPP() {
     const interval = setInterval(() => {
         if (typeof APP !== 'undefined' 
