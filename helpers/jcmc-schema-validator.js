@@ -12,7 +12,8 @@ var validator = () => {
         metrics : {
             connectionquality : Joi.object({
                 labels : Joi.object({
-                    serverregion : Joi.string().allow('')
+                    serverregion : Joi.string().allow(''),
+                    username : Joi.string().allow('')
                 }),
                 value : Joi.number().ruleset.min(0).max(100).allow(null)
             }),

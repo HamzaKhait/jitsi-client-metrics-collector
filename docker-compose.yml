@@ -10,6 +10,7 @@ services:
       - METRICS_EXPIRATION=30 #In seconds
       - ALLOW_PRIVATE_SCRAPE_ONLY=false
       - PUSH_URL=http://127.0.0.1:3000/metrics/push # the push url that will be used by users
+      - COLLECT_USERNAME=true
     networks:
       - jcmcNet
     ports:

@@ -1,5 +1,5 @@
 // URL where data is sent
-const jcmc_push_url = '<%= jcmc_push_url %>'; //this value is generated dynamically by the backend
+const jcmc_push_url = '<%= appConfig.PUSH_URL %>'; //this value is generated dynamically by the backend
 
 // Function that returns clientID from local storage
 // If variable doesn't exist, it creates one and then returns it
@@ -22,6 +22,7 @@ function formatJitsiMetrics(JitsiMetrics) {
     var _client_id = getStaticId() || "";
     var _participant_id = APP.conference.getMyUserId();
     var _roomname = APP.conference.roomName || "";
+    var _jitsi_settings = JSON.parse(localStorage.getItem("features/base/settings"));
 
     return {
         default_labels : {
@@ -32,8 +33,10 @@ function formatJitsiMetrics(JitsiMetrics) {
         metrics : {
             connectionquality : {
                 labels : {
-                    serverregion : JitsiMetrics.serverRegion || ""
-                    // video_codec :  , //TODO handle screen sharing
+                    serverregion : JitsiMetrics.serverRegion || "",
+                    <% if (!appConfig.COLLECT_USERNAME) { %>
+                    username : (_jitsi_settings ? _jitsi_settings.displayName : '')
+                    <% } %>
                     // audio_codec : ,  //TODO handle screen sharing
                     // screensharing_video_codec : , //TODO handle screen sharing
                     // screensharing_audio_codec : , //TODO handle screen sharing

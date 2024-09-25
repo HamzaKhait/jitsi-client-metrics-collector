@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/client-file', function(req, res, next) {
   res.setHeader('Content-Type','text/javascript; charset=UTF-8');
-  res.render('jcmc-client-file', { jcmc_push_url: appConfig.PUSH_URL });
+  res.render('jcmc-client-file', { appConfig: appConfig });
 });
 
 

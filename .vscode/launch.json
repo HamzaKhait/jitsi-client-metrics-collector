@@ -11,7 +11,8 @@
         "runtimeExecutable": "node",
         "outFiles": ["${workspaceFolder}/**/*.js"],
         "console": "integratedTerminal",
-        "internalConsoleOptions": "neverOpen"
+        "internalConsoleOptions": "neverOpen",
+        "envFile": "${workspaceFolder}/.env"
       }
     ]
 }

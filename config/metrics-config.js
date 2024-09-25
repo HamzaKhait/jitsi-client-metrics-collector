@@ -15,7 +15,7 @@ metricsConfig.metrics = [
         type : "gauge",
         name: 'connectionquality',
         help : "Connection Quality",
-        labels : ['browser_name', 'browser_version', 'os_name' ,'os_version','serverregion']
+        labels : ['browser_name', 'browser_version', 'os_name' ,'os_version','serverregion', 'username']
     },
     {
         type : "gauge",
