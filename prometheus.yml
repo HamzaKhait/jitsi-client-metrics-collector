@@ -5,8 +5,8 @@ scrape_configs:
    static_configs:
     - targets:
        - prometheus:9090
- - job_name: pushgateway
+ - job_name: jcmc
   #  honor_labels: true
    static_configs:
     - targets:
-       - nodeapp:3000
+       - jcmc:3000

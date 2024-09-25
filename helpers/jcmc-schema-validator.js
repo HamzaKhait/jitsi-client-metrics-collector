@@ -12,7 +12,8 @@ var validator = () => {
         metrics : {
             connectionquality : Joi.object({
                 labels : Joi.object({
-                    serverregion : Joi.string().allow('')
+                    serverregion : Joi.string().allow(''),
+                    username : Joi.string().allow('')
                 }),
                 value : Joi.number().ruleset.min(0).max(100).allow(null)
             }),
@@ -49,15 +50,17 @@ var validator = () => {
             packetloss_total : Joi.object({
                 value : Joi.number().allow(null),
             }),
-            transport_rtt : Joi.object({
-                labels : {
-                    src_ip : Joi.string().ip({cidr: 'forbidden' }),
-                    dst_ip : Joi.string().ip({cidr: 'forbidden' }),
-                    protocol : Joi.string().valid('tcp', 'udp'),
-                    networkType : Joi.string().allow('')
-                },
-                value : Joi.number().allow(null),
-            })
+            transport_rtt: Joi.array().items(
+                Joi.object({
+                    labels : {
+                        src_ip : Joi.string().ip({ version: ['ipv4', 'ipv6'], cidr: 'forbidden' }),
+                        dst_ip : Joi.string().ip({ version: ['ipv4', 'ipv6'], cidr: 'forbidden' }),
+                        protocol : Joi.string().valid('tcp', 'udp'),
+                        networkType : Joi.string().allow('') //TODO Enhance verification
+                    },
+                    value : Joi.number().allow(null),
+                })
+            )
         }
         
         // {

@@ -1,5 +1,5 @@
 // URL where data is sent
-const jcmc_push_url = '<%= jcmc_push_url %>'; //this value is generated dynamically by the backend
+const jcmc_push_url = '<%= appConfig.PUSH_URL %>'; //this value is generated dynamically by the backend
 
 // Function that returns clientID from local storage
 // If variable doesn't exist, it creates one and then returns it
@@ -22,6 +22,7 @@ function formatJitsiMetrics(JitsiMetrics) {
     var _client_id = getStaticId() || "";
     var _participant_id = APP.conference.getMyUserId();
     var _roomname = APP.conference.roomName || "";
+    var _jitsi_settings = JSON.parse(localStorage.getItem("features/base/settings"));
 
     return {
         default_labels : {
@@ -32,8 +33,10 @@ function formatJitsiMetrics(JitsiMetrics) {
         metrics : {
             connectionquality : {
                 labels : {
-                    serverregion : JitsiMetrics.serverRegion || ""
-                    // video_codec :  , //TODO handle screen sharing
+                    serverregion : JitsiMetrics.serverRegion || "",
+                    <% if (!appConfig.COLLECT_USERNAME) { %>
+                    username : (_jitsi_settings ? _jitsi_settings.displayName : '')
+                    <% } %>
                     // audio_codec : ,  //TODO handle screen sharing
                     // screensharing_video_codec : , //TODO handle screen sharing
                     // screensharing_audio_codec : , //TODO handle screen sharing
@@ -82,15 +85,15 @@ function formatJitsiMetrics(JitsiMetrics) {
             packetloss_total : {
                 value : JitsiMetrics.packetLoss.total || null,
             },
-            transport_rtt : {
-                labels:{
-                    src_ip : JitsiMetrics.transport[0].localip.split(':')[0],
-                    dst_ip :JitsiMetrics.transport[0].ip.split(':')[0],
-                    protocol : JitsiMetrics.transport[0].type,
-                    networkType : JitsiMetrics.transport[0].networkType
+            transport_rtt: JitsiMetrics.transport.map(item => ({
+                labels: {
+                    src_ip: item.localip.replace(/:\d+$/, ''),
+                    dst_ip: item.ip.replace(/:\d+$/, ''),
+                    protocol: item.type, 
+                    networkType: item.networkType
                 },
-                value : JitsiMetrics.transport[0].rtt || null,
-            }    
+                value: item.rtt
+            }))
         }
     };
 }
@@ -118,7 +121,7 @@ function RunJCMC() {
     APP.conference._room.on(local_stats_updated_event, (jitsiStats) => pushMetrics(jitsiStats))
 }
 
-// wait for Jitsi
+// wait for Jitsi to be ready
 function waitForJitsiAPP() {
     const interval = setInterval(() => {
         if (typeof APP !== 'undefined' 

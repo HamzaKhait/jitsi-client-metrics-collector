@@ -70,6 +70,7 @@ router.get('/', async (req, res) => {
   }
   else{
     let metrics = await prom_registry.metrics();
+    res.set('content-type', 'text/plain');
     res.status(200).send(metrics); 
   }
 })
@@ -84,7 +85,6 @@ router.post('/push', async (req, res) => {
     return res.status(400).send(JSON.stringify(validation.error.details));
   }
   else{
-
     //append browser info to request
     var received_connectionquality = received_metrics.metrics.connectionquality || null;
     if (received_connectionquality){
@@ -108,8 +108,15 @@ router.post('/push', async (req, res) => {
     let transformed_metrics = jcmcToProm.transformJsonMetrics(received_metrics);
 
     for (const key in transformed_metrics) {
-          prom_registry.getSingleMetric(key).labels(transformed_metrics[key].labels).set(transformed_metrics[key].value);
+      if (Array.isArray(transformed_metrics[key])){
+        for (const element of transformed_metrics[key]) {
+          prom_registry.getSingleMetric(key).labels(element.labels).set(element.value);
+        }
       }
+      else{
+        prom_registry.getSingleMetric(key).labels(transformed_metrics[key].labels).set(transformed_metrics[key].value);
+      }
+    }
 
     res.status(200).send("OK"); 
   }

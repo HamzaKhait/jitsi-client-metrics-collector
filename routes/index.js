@@ -5,12 +5,12 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send(200);
+  res.status(200).send("JCMC IS UP"); 
 });
 
 router.get('/client-file', function(req, res, next) {
   res.setHeader('Content-Type','text/javascript; charset=UTF-8');
-  res.render('jcmc-client-file', { jcmc_push_url: appConfig.PUSH_URL });
+  res.render('jcmc-client-file', { appConfig: appConfig });
 });
 
 

@@ -7,6 +7,7 @@ const appConfig = {
   METRICS_EXPIRATION: parseInt(process.env.METRICS_EXPIRATION) || 30,
   ALLOW_PRIVATE_SCRAPE_ONLY: toBool(process.env.ALLOW_PRIVATE_SCRAPE_ONLY) || false,
   PUSH_URL: process.env.PUSH_URL || "http://127.0.0.1:3000/metrics/push",
+  COLLECT_USERNAME : toBool(process.env.PUSH_URL) || false,
   METRICS_PREFIX: process.env.METRICS_PREFIX || "jitsi_jcmc_"
 };
 

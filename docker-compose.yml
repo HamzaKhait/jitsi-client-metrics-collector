@@ -1,15 +1,8 @@
-version: '3'
 services:
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
-    networks:
-      - localprom
-    ports:
-      - 9090:9090  
-  nodeapp:
-    image: node:lts-slim
+  jcmc:
+    image: jcmc
+    build:
+      context: .
     environment:
       - NODE_ENV=development
       - REDIS_URL=redis://redis:6379
@@ -17,21 +10,34 @@ services:
       - METRICS_EXPIRATION=30 #In seconds
       - ALLOW_PRIVATE_SCRAPE_ONLY=false
       - PUSH_URL=http://127.0.0.1:3000/metrics/push # the push url that will be used by users
+      - COLLECT_USERNAME=true
     networks:
-      - localprom
-    volumes:
-      - .:/nodeapp
+      - jcmcNet
     ports:
       - 3000:3000
-    working_dir: /nodeapp
-    command: npm start
+      - 9229:9229 # Port for debugging
+    volumes:
+      - ".:/jcmc"
+    working_dir: /jcmc
+    command: sleep infinity
+
   redis:
     image: redis
     restart: always
     ports:
       - '6379:6379'
     networks:
-      - localprom
+      - jcmcNet
+    
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    networks:
+      - jcmcNet
+    ports:
+      - 9090:9090
+
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -39,8 +45,8 @@ services:
     ports:
      - '3001:3000'
     networks:
-      - localprom
+      - jcmcNet
       
 networks:
-  localprom:
+  jcmcNet:
     driver: bridge
