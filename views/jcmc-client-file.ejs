@@ -19,7 +19,7 @@ function getStaticId() {
 }
 
 function formatJitsiMetrics(JitsiMetrics) {
-    var _client_id = getStaticId() || "";
+    var _client_id = getStaticId();
     var _participant_id = APP.conference.getMyUserId();
     var _roomname = APP.conference.roomName || "";
     var _jitsi_settings = JSON.parse(localStorage.getItem("features/base/settings"));
@@ -33,9 +33,9 @@ function formatJitsiMetrics(JitsiMetrics) {
         metrics : {
             connectionquality : {
                 labels : {
-                    serverregion : JitsiMetrics.serverRegion || "",
+                    serverregion : JitsiMetrics.serverRegion || null,
                     <% if (!appConfig.COLLECT_USERNAME) { %>
-                    username : (_jitsi_settings ? _jitsi_settings.displayName : '')
+                    username : (_jitsi_settings ? _jitsi_settings.displayName : null)
                     <% } %>
                     // audio_codec : ,  //TODO handle screen sharing
                     // screensharing_video_codec : , //TODO handle screen sharing
@@ -44,28 +44,28 @@ function formatJitsiMetrics(JitsiMetrics) {
                 value : JitsiMetrics.connectionQuality || null,
             },
             bandwidth_upload : {
-                value : JitsiMetrics.bandwidth.upload || null,
+                value : (JitsiMetrics.bandwidth ? JitsiMetrics.bandwidth.upload : null),
             },
             bandwidth_download : {
-                value : JitsiMetrics.bandwidth.download || null,
+                value : (JitsiMetrics.bandwidth ? JitsiMetrics.bandwidth.download : null),
             },
             bitrate_audio_upload : {
-                value : JitsiMetrics.bitrate.audio.upload || null,
+                value : (JitsiMetrics.bitrate ? JitsiMetrics.bitrate.audio.upload : null),
             },
             bitrate_audio_download : {
-                value : JitsiMetrics.bitrate.audio.download || null,
+                value : (JitsiMetrics.bitrate ? JitsiMetrics.bitrate.audio.download : null),
             },
             bitrate_video_upload : {
-                value : JitsiMetrics.bitrate.video.upload || null,
+                value : (JitsiMetrics.bitrate ? JitsiMetrics.bitrate.video.upload : null),
             },
             bitrate_video_download : {
-                value : JitsiMetrics.bitrate.video.download || null,
+                value : (JitsiMetrics.bitrate ? JitsiMetrics.bitrate.video.download : null),
             },
             bitrate_download : {
-                value : JitsiMetrics.bitrate.download || null,
+                value : (JitsiMetrics.bitrate ? JitsiMetrics.bitrate.download : null),
             },
             bitrate_upload : {
-                value : JitsiMetrics.bitrate.upload || null, //if >JitsiMetrics.bitrate.video.upload then user is screensharing //TODO handle screensharing
+                value : (JitsiMetrics.bitrate ? JitsiMetrics.bitrate.upload : null), //if >JitsiMetrics.bitrate.video.upload then user is screensharing //TODO handle screensharing
             },
             // framerate : {
             //     value : JitsiMetrics.framerate[participant_id] || null, //TODO handle screen sharing by selecting ssrc
@@ -77,20 +77,20 @@ function formatJitsiMetrics(JitsiMetrics) {
             //     value : JitsiMetrics.resolution[participant_id][0].width || null, //TODO handle screen sharing by selecting ssrc
             // },        
             packetloss_upload : {
-                value : JitsiMetrics.packetLoss.upload || null,
+                value : (JitsiMetrics.packetLoss ? JitsiMetrics.packetLoss.upload : null),
             },
             packetloss_download : {
-                value : JitsiMetrics.packetLoss.download || null,
+                value : (JitsiMetrics.packetLoss ? JitsiMetrics.packetLoss.download : null),
             },
             packetloss_total : {
-                value : JitsiMetrics.packetLoss.total || null,
+                value : (JitsiMetrics.packetLoss ? JitsiMetrics.packetLoss.total : null),
             },
             transport_rtt: JitsiMetrics.transport.map(item => ({
                 labels: {
-                    src_ip: item.localip.replace(/:\d+$/, ''),
-                    dst_ip: item.ip.replace(/:\d+$/, ''),
-                    protocol: item.type, 
-                    networkType: item.networkType
+                    src_ip: (item.localip ? item.localip.replace(/:\d+$/, '') : null),
+                    dst_ip: (item.ip ? item.ip.replace(/:\d+$/, '') : null),
+                    protocol: item.type || null, 
+                    networkType: item.networkType || null
                 },
                 value: item.rtt
             }))
